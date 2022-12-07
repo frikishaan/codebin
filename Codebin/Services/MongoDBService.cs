@@ -96,11 +96,13 @@ namespace Codebin.Services
                         }
                         }
                     }
+                }),
+                new BsonDocument("$match", new BsonDocument{
+                    { "user_id", _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) }
                 })
             };
 
             var result = await _snippetCollection.Aggregate<Snippet>(pipeline).ToListAsync();
-
             return result;
         }
     }
