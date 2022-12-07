@@ -32,9 +32,9 @@ namespace Codebin
                 .AddCookie()
                 .AddOpenIdConnect("Auth0", options =>
                 {
-                    options.Authority = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
-                    options.ClientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID");
-                    options.ClientSecret = Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET");
+                    options.Authority = builder.Configuration["Auth0:Domain"] ?? Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
+                    options.ClientId = builder.Configuration["Auth0:ClientId"] ?? Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID");
+                    options.ClientSecret = builder.Configuration["Auth0:ClientSecret"] ?? Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET");
 
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.Scope.Clear();
@@ -49,7 +49,7 @@ namespace Codebin
                     {
                         OnRedirectToIdentityProviderForSignOut = (context) =>
                         {
-                            var logoutUri = $"${Environment.GetEnvironmentVariable("AUTH0_DOMAIN")}/v2/logout?client_id=${Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID")}";
+                            var logoutUri = $"${builder.Configuration["Auth0:Domain"] ?? Environment.GetEnvironmentVariable("AUTH0_DOMAIN")}/v2/logout?client_id=${builder.Configuration["Auth0:ClientId"] ?? Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID")}";
 
                             var postLogoutUri = context.Properties.RedirectUri;
                             if (!string.IsNullOrEmpty(postLogoutUri))
@@ -73,7 +73,7 @@ namespace Codebin
 
                             builder.Scheme = "https";
 
-                            context.ProtocolMessage.RedirectUri = builder.ToString();
+                            context.ProtocolMessage.RedirectUri = $"{builder.Scheme}://{builder.Host}" + (builder.Port != 80 ? ":" + builder.Port : "") + $"{builder.Path}";
 
                             return Task.FromResult(0);
                         }
