@@ -14,6 +14,23 @@ namespace Codebin
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            string domain = string.Empty;
+            string client_id = string.Empty;
+            string client_secret = string.Empty;
+
+            if(!builder.Environment.IsDevelopment())
+            {
+                domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
+                client_id = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID");
+                client_secret = Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET");
+            }
+            else
+            {
+                domain = builder.Configuration["Auth0:Domain"];
+                client_id = builder.Configuration["Auth0:ClientId"];
+                client_secret = builder.Configuration["Auth0:ClientSecret"];
+            }
             
             // App settings
             builder.Services.Configure<Auth0Settings>(builder.Configuration.GetSection("Auth0"));
@@ -32,9 +49,9 @@ namespace Codebin
                 .AddCookie()
                 .AddOpenIdConnect("Auth0", options =>
                 {
-                    options.Authority = builder.Configuration["Auth0:Domain"] ?? Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
-                    options.ClientId = builder.Configuration["Auth0:ClientId"] ?? Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID");
-                    options.ClientSecret = builder.Configuration["Auth0:ClientSecret"] ?? Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET");
+                    options.Authority =  domain;
+                    options.ClientId = client_id;
+                    options.ClientSecret = client_secret;
 
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.Scope.Clear();
@@ -49,7 +66,7 @@ namespace Codebin
                     {
                         OnRedirectToIdentityProviderForSignOut = (context) =>
                         {
-                            var logoutUri = $"${builder.Configuration["Auth0:Domain"] ?? Environment.GetEnvironmentVariable("AUTH0_DOMAIN")}/v2/logout?client_id=${builder.Configuration["Auth0:ClientId"] ?? Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID")}";
+                            var logoutUri = $"{domain}/v2/logout?client_id={client_id}";
 
                             var postLogoutUri = context.Properties.RedirectUri;
                             if (!string.IsNullOrEmpty(postLogoutUri))
@@ -69,11 +86,18 @@ namespace Codebin
                         },
                         OnRedirectToIdentityProvider = (context) =>
                         {
-                            var builder = new UriBuilder(context.ProtocolMessage.RedirectUri);
+                            var uri = new UriBuilder(context.ProtocolMessage.RedirectUri);
 
-                            builder.Scheme = "https";
+                            uri.Scheme = "https";
 
-                            context.ProtocolMessage.RedirectUri = $"{builder.Scheme}://{builder.Host}" + (builder.Port != 80 ? ":" + builder.Port : "") + $"{builder.Path}";
+                            if(!builder.Environment.IsDevelopment())
+                            {
+                                context.ProtocolMessage.RedirectUri = $"{uri.Scheme}://{uri.Host}{uri.Path}";
+                            }
+                            else
+                            {
+                                context.ProtocolMessage.RedirectUri = $"{uri.Scheme}://{uri.Host}:{uri.Port}{uri.Path}";
+                            }
 
                             return Task.FromResult(0);
                         }
