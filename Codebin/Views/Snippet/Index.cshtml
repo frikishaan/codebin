@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Codebin.Models.Snippet>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My Snippets";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -37,7 +37,7 @@
                     <td>
                         @Html.ActionLink("Edit", "Edit", new {  id=item.Id }, new { @class = "btn btn-primary btn-sm me-2" })
                         @Html.ActionLink("Details", "Details", new {  id=item.Id },  new { @class = "btn btn-secondary btn-sm me-2" })
-                        @Html.ActionLink("Delete", "Delete", new {  id=item.Id },  new { @class = "btn btn-danger btn-sm" })
+                        @*@Html.ActionLink("Delete", "Delete", new {  id=item.Id },  new { @class = "btn btn-danger btn-sm" })*@
                     </td>
                 </tr>
             }
