@@ -13,8 +13,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "AUTH0_DOMAIN": "https://frikishaan.com"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "Docker": {
