@@ -13,7 +13,8 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AUTH0_DOMAIN": "https://frikishaan.com"
       }
     },
     "Docker": {
@@ -21,7 +22,15 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": true,
+      "environmentVariables": {
+        "AUTH0_DOMAIN": "",
+        "AUTH0_CLIENT_ID": "",
+        "AUTH0_CLIENT_SECRET": "",
+        "MONGO_CONNECTION_URI": "",
+        "MONGO_DATABASE": "",
+        "MONGO_COLLECTION": ""
+      }
     }
   },
   "iisSettings": {

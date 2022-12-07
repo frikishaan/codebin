@@ -32,9 +32,9 @@ namespace Codebin
                 .AddCookie()
                 .AddOpenIdConnect("Auth0", options =>
                 {
-                    options.Authority = builder.Configuration["Auth0:Domain"];
-                    options.ClientId = builder.Configuration["Auth0:ClientId"];
-                    options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
+                    options.Authority = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
+                    options.ClientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID");
+                    options.ClientSecret = Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET");
 
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.Scope.Clear();
