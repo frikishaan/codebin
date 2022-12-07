@@ -33,7 +33,6 @@ namespace Codebin
             }
             
             // App settings
-            builder.Services.Configure<Auth0Settings>(builder.Configuration.GetSection("Auth0"));
             builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
             // Lowercase URLs
@@ -46,7 +45,13 @@ namespace Codebin
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
-                .AddCookie()
+                .AddCookie(options =>
+                {
+                    //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                })
                 .AddOpenIdConnect("Auth0", options =>
                 {
                     options.Authority =  domain;
