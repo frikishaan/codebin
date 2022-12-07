@@ -49,7 +49,7 @@ namespace Codebin
                     {
                         OnRedirectToIdentityProviderForSignOut = (context) =>
                         {
-                            var logoutUri = $"${builder.Configuration["Auth0:Domain"]}/v2/logout?client_id=${builder.Configuration["Auth0:ClientId"]}";
+                            var logoutUri = $"${Environment.GetEnvironmentVariable("AUTH0_DOMAIN")}/v2/logout?client_id=${Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID")}";
 
                             var postLogoutUri = context.Properties.RedirectUri;
                             if (!string.IsNullOrEmpty(postLogoutUri))
@@ -57,7 +57,7 @@ namespace Codebin
                                 if (postLogoutUri.StartsWith("/"))
                                 {
                                     var request = context.Request;
-                                    postLogoutUri = $"{request.Scheme}://{request.Host}{request.PathBase}{postLogoutUri}";
+                                    postLogoutUri = $"https://{request.Host}{request.PathBase}{postLogoutUri}";
                                 }
                                 logoutUri += $"&returnTo={Uri.EscapeDataString(postLogoutUri)}";
                             }
@@ -66,6 +66,16 @@ namespace Codebin
                             context.HandleResponse();
 
                             return Task.CompletedTask;
+                        },
+                        OnRedirectToIdentityProvider = (context) =>
+                        {
+                            var builder = new UriBuilder(context.ProtocolMessage.RedirectUri);
+
+                            builder.Scheme = "https";
+
+                            context.ProtocolMessage.RedirectUri = builder.ToString();
+
+                            return Task.FromResult(0);
                         }
                     };
                 });
