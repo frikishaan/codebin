@@ -13,9 +13,9 @@ namespace Codebin.Services
 
         public MongoDBService(IOptions<MongoDBSettings> mongoDBSettings, IHttpContextAccessor httpContextAccessor)
         {
-            MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI ?? Environment.GetEnvironmentVariable("MONGO_CONNECTION_URI"));
-            IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName ?? Environment.GetEnvironmentVariable("MONGO_DATABASE"));
-            _snippetCollection = database.GetCollection<Snippet>(mongoDBSettings.Value.CollectionName ?? Environment.GetEnvironmentVariable("MONGO_COLLECTION"));
+            MongoClient client = new MongoClient(Environment.GetEnvironmentVariable("MONGO_CONNECTION_URI") ?? mongoDBSettings.Value.ConnectionURI);
+            IMongoDatabase database = client.GetDatabase(Environment.GetEnvironmentVariable("MONGO_DATABASE") ?? mongoDBSettings.Value.DatabaseName);
+            _snippetCollection = database.GetCollection<Snippet>(Environment.GetEnvironmentVariable("MONGO_COLLECTION") ?? mongoDBSettings.Value.CollectionName);
             _httpContextAccessor = httpContextAccessor;
         }
 
