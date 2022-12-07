@@ -46,10 +46,13 @@
                             </li>
                         }
                     </ul>
-                    <form asp-controller="Snippet" asp-action="Search" method="get" class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
-                        <button class="btn btn-sm btn-secondary" type="submit">Search</button>
-                    </form>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-controller="Snippet" asp-action="Search" method="get" class="d-flex">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
+                            <button class="btn btn-sm btn-secondary" type="submit">Search</button>
+                        </form>
+                    }
                 </div>
             </div>
         </nav>
@@ -62,9 +65,12 @@
 
     <footer class="border-top footer text-muted text-center mt-5" style="position:relative;">
         <div class="container text-center">
-            &copy; 2022 - Codebin
-            <br />
-            Created by <a href="https://frikishaan.com" target="_blank">Ishaan Sheikh</a>
+            <p style="line-height:0;margin:0;">
+                &copy; 2022 - Codebin
+            </p>
+            <p style="padding:0;margin:0;">
+                Created by <a href="https://frikishaan.com" target="_blank">Ishaan Sheikh</a>
+            </p>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
