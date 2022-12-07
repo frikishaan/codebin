@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Codebin.Models.Snippet>
+
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Search results</h1>
+
+
+@if(Model.Count() > 0)
+{
+    <ul style="list-style-type:none">
+        @foreach (var snippet in Model) 
+        {
+            <li class="p-4 mb-4 card snippet border border-primary">
+                <div>
+                    @Html.ActionLink(snippet.Title, "Details", new {  id = snippet.Id }, new { @class = "text-secondary", @style = "text-decoration:none", @target = "_blank"})
+                    <span class="badge bg-info ms-2">@snippet.Language</span>
+                </div>
+                <div class="d-inline mt-4">
+                    @foreach (string tag in snippet.Tags)
+                    {
+                        <span class="badge bg-primary">@tag</span>
+                    }
+                </div>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No snippets found.</p>
+}
+
+<style>
+    ul li.snippet a:hover{
+        text-decoration: underline;
+    }
+</style>

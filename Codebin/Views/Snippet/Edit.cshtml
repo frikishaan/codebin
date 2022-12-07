@@ -1,0 +1,56 @@
+﻿@model Codebin.Models.Snippet
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Snippet</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Content" class="control-label"></label>
+                <textarea asp-for="Content" class="form-control" rows="10"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Language" class="control-label"></label>
+                <input asp-for="Language" class="form-control" />
+                <span asp-validation-for="Language" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Tags" class="control-label"></label>
+                <input asp-for="Tags" value="@String.Join(",", Model.Tags)" class="form-control" />
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    window.onload = () => {
+        var input = document.querySelector('input[name=Tags]');
+
+        // initialize Tagify on the above input node reference
+        new Tagify(input, {
+            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value)
+        });
+    }
+</script>

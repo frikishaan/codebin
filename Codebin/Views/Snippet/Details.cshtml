@@ -1,0 +1,29 @@
+﻿@model Codebin.Models.Snippet
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<a asp-action="Index">Back to List</a>
+
+<h1 class="mt-4">@Model.Title</h1>
+
+<div>
+    <div class="float-end">
+        @Html.ActionLink("Edit", "Edit", new {  id = Model.Id }, new { @class = "btn btn-secondary" })
+        @Html.ActionLink("Delete", "Delete", new {  id = Model.Id }, new { @class = "btn btn-danger" })
+    </div>
+
+    <div>
+        <hr />
+        <div>
+            @foreach(string tag in Model.Tags)
+            {
+                <span class="badge bg-secondary">@tag</span>
+            }
+        </div>
+        <pre style="white-space: pre-wrap;" class="mt-2 p-4"><code class="lang-@Model.Language.ToLower()">@Model.Content</code></pre>
+    </div>
+</div>
+
