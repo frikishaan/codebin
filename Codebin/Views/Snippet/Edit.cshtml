@@ -25,7 +25,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="Language" class="control-label"></label>
-                <input asp-for="Language" class="form-control" />
+                <select asp-for="Language" asp-items="Language.GetLanguages()" class="form-control">
+                    <option value="">Please select</option>
+                </select>
                 <span asp-validation-for="Language" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
